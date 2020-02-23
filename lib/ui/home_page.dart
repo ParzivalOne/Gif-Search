@@ -10,7 +10,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String _search;
-  int _offset;
+  int _offset = 0;
 
   Future<Map> _getGifs() async {
     http.Response response;
@@ -57,6 +57,7 @@ class _HomePageState extends State<HomePage> {
               onSubmitted: (text){
                 setState(() {
                   _search = text;
+                  _offset = 0;
                 });
               },
             ),
@@ -90,6 +91,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  int _getCount(List data){
+    if(_search == null) return data.length;
+    else return data.length+1;
+  }
+
   Widget _createGifTable(BuildContext context, AsyncSnapshot snapshot){
     return GridView.builder(
         padding: EdgeInsets.all(10.0),
@@ -98,13 +104,41 @@ class _HomePageState extends State<HomePage> {
           crossAxisSpacing: 10.0,
           mainAxisSpacing: 10.0
         ),
-        itemCount: snapshot.data["data"].length,
+        //itemCount: snapshot.data["data"].length,
+        itemCount: _getCount(snapshot.data["data"]),
         itemBuilder: (context, index){
+          if(_search == null || index < snapshot.data["data"].length)
           return GestureDetector(
             child: Image.network(snapshot.data["data"][index]["images"]["fixed_height"]["url"],
             height: 300.0,
             fit: BoxFit.cover,),
           );
+          else
+            return Container(
+              child: GestureDetector(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.add,
+                      color: Colors.white,
+                      size: 70.0
+                    ),
+                    Text("Carregar mais...",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22.0
+                      ),
+                    )
+                  ],
+                ),
+                onTap: (){
+                  setState(() {
+                    _offset+=21;
+                  });
+                },
+              ),
+            );
         });
 
   }
