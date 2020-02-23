@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:gif_browser/ui/gif_page.dart';
 import 'package:gif_browser/ui/home_page.dart';
 
 void main (){
