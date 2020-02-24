@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_downloader/image_downloader.dart';
 import 'package:share/share.dart';
 
 
@@ -17,6 +18,13 @@ class GifPage extends StatelessWidget {
         title: Text(_gifData["title"], style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.black,
         actions: <Widget>[
+          IconButton(
+              icon: Icon(Icons.file_download),
+              onPressed: () async {
+                await ImageDownloader.downloadImage(
+                    _gifData["images"]["fixed_height"]["url"],
+                    destination: AndroidDestinationType.directoryDownloads);
+              }),
           IconButton(
             icon: Icon(Icons.share),
             onPressed: (){
